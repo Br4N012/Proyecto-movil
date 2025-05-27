@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FCFFDF"
+    tools:context=".AgregarRecetaActivity">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="24dp"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/tv_titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar Receta"
+            android:fontFamily="@font/display"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:textSize="40sp"
+            android:textColor="#021D3D"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_nombre_receta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto"
+            android:inputType="textCapWords|textAutoComplete"
+            android:padding="10dp"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            android:background="@drawable/rounded_edittext" />
+        <!-- NUEVO: Campo numérico + unidad de tiempo -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
+
+            <EditText
+                android:id="@+id/et_numero_tiempo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Tiempo"
+                android:inputType="number"
+                android:padding="10dp"
+                android:fontFamily="@font/roboto"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                android:background="@drawable/rounded_edittext" />
+
+            <Spinner
+                android:id="@+id/spinner_unidad_tiempo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:padding="10dp"
+                android:background="@drawable/rounded_edittext" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Spinner
+                android:id="@+id/sp_ingredientes_receta"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:padding="10dp"
+                android:textColor="#000000"
+                android:textColorHint="#000000" />
+
+            <Spinner
+                android:id="@+id/sp_unidad_medida"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/roboto"
+                android:padding="10dp"
+                android:textColor="#000000"
+                android:textColorHint="#000000" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/et_ingredientes"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:hint="Ingredientes"
+            android:padding="12dp"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="#000000"
+            android:textColorHint="@color/black"
+            android:enabled="false" />
+
+        <!-- Campo para mostrar imagen de la receta -->
+        <ImageView
+            android:id="@+id/iv_imagen_receta"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="centerCrop"
+            android:src="@android:drawable/ic_menu_gallery" />
+
+        <Button
+            android:id="@+id/btn_seleccionar_imagen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar imagen"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/roboto"
+            android:textColor="#021D3D" />
+
+        <EditText
+            android:id="@+id/et_preparacion"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:hint="Preparación"
+            android:padding="12dp"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="#000000"
+            android:textColorHint="@color/black" />
+
+        <Button
+            android:id="@+id/btn_agregar_receta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Agregar receta"
+            android:textSize="20sp"
+            android:textColor="#021D3D"
+            android:fontFamily="@font/roboto"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp" />
+
+    </LinearLayout>
+</ScrollView>

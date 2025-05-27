@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FCFFDF"
+    tools:context=".fragmentos.PerfilFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Perfil"
+            android:fontFamily="@font/display"
+            android:textSize="40sp"
+            android:textColor="#021D3D"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"/>
+
+        <ImageView
+            android:id="@+id/icono"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/person_24px"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/nombre_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Perfil"
+            android:fontFamily="@font/display"
+            android:textSize="30sp"
+            android:textColor="#021D3D"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/btn_editarP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Editar Perfil"
+            android:layout_marginTop="16dp"
+            android:textColor="#021D3D"
+            android:fontFamily="@font/roboto"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btn_Buscar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Buscar usuario"
+            android:layout_marginTop="16dp"
+            android:textColor="#021D3D"
+            android:fontFamily="@font/roboto"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btn_config_fuente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tamaño de texto"
+            android:layout_marginTop="16dp"
+            android:textColor="#021D3D"
+            android:fontFamily="@font/roboto"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btn_config_boton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tamaño de botón"
+            android:layout_marginTop="16dp"
+            android:textColor="#021D3D"
+            android:fontFamily="@font/roboto"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btnModoOscuro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Modo oscuro"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btn_eliminarP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Eliminar Perfil"
+            android:layout_marginTop="16dp"
+            android:textColor="#FF1100"
+            android:fontFamily="@font/roboto"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btn_cerrar_sesion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cerrar sesión"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/button"
+            android:textColor="#021D3D"
+            android:fontFamily="@font/roboto"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CalificarRecetaActivity"
+    android:background="#FCFFDF">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calificar Receta"
+        android:fontFamily="@font/display"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textColor="#021D3D"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_nombre_receta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre Receta"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="10dp"
+                android:textSize="20sp"
+                android:textColor="#021D3D"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/ib_estrella_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_estrella_negra"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="10dp"
+                    android:layout_margin="5dp"/>
+
+                <ImageButton
+                    android:id="@+id/ib_estrella_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_estrella_negra"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="10dp"
+                    android:layout_margin="5dp"/>
+
+                <ImageButton
+                    android:id="@+id/ib_estrella_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_estrella_negra"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="10dp"
+                    android:layout_margin="5dp" />
+
+                <ImageButton
+                    android:id="@+id/ib_estrella_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_estrella_negra"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="10dp"
+                    android:layout_margin="5dp"/>
+
+                <ImageButton
+                    android:id="@+id/ib_estrella_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_estrella_negra"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="10dp"
+                    android:layout_margin="5dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_nombre_usuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre Usuario"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="20sp"
+                android:textColor="#021D3D"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comentario"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="10dp"
+                android:textSize="20sp"
+                android:textColor="#021D3D"
+                android:textStyle="bold"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Introduce tu comentario">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ti_comentario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColorHint="@color/black"
+                    android:textColor="@color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_calificar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calificar Receta"
+        android:fontFamily="@font/roboto"
+        android:layout_marginStart="10dp"
+        android:textSize="20sp"
+        android:textColor="#021D3D"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="18dp"
+        android:background="#BABABA"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Comentarios"
+        android:fontFamily="@font/roboto"
+        android:layout_marginStart="10dp"
+        android:textSize="20sp"
+        android:textColor="#021D3D"
+        android:textStyle="bold"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_comentarios"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="2dp"
+        />
+    <TextView
+        android:id="@+id/tv_texto_no_hay_comentarios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="18sp"
+        android:fontFamily="@font/roboto"
+        android:textAlignment="center"
+        android:layout_marginTop="60dp"
+        android:textColor="@color/black"
+        android:text="Por el Momento no hay Comentarios"
+        />
+
+</LinearLayout>

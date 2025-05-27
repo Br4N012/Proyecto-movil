@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragmentos.HomeFragment"
+    android:background="#FCFFDF"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buscar Recetas"
+        android:fontFamily="@font/display"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textSize="40sp"
+        android:textColor="#021D3D"
+        android:textStyle="bold"/>
+
+    <ImageView
+        android:id="@+id/icono"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/receipt_long_24px" />
+
+    <Button
+        android:id="@+id/btn_buscarP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="300dp"
+        android:fontFamily="@font/roboto"
+        android:text="Buscar por presupuesto"
+        android:textColor="#021D3D"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_gestionar_ingredientes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="500dp"
+        android:text="Gestionar Ingredientes"
+        android:textSize="20sp"
+        android:fontFamily="@font/roboto"
+        android:textColor="#021D3D"/>
+
+
+    <Button
+        android:id="@+id/btn_buscarI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="400dp"
+        android:fontFamily="@font/roboto"
+        android:text="Buscar por ingredientes"
+        android:textColor="#021D3D"
+        android:textSize="20sp"/>
+
+</FrameLayout>

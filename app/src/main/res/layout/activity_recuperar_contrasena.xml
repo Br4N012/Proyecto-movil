@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RecuperarContrasenaActivity"
+    android:orientation="vertical"
+    android:background="#FCFFDF">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recupera tu contraseña"
+        android:fontFamily="@font/display"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:textSize="40sp"
+        android:textAlignment="center"
+        android:textColor="#021D3D"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/et_correo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/login_et_correo"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/roboto"
+        android:inputType="textEmailAddress|textAutoComplete"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#021D3D"
+        android:background="@drawable/rounded_edittext"
+        />
+
+    <Button
+        android:id="@+id/btn_enviar_correo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enviar codigo"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto"
+        android:textColor="#021D3D"
+        android:textSize="20sp"/>
+
+    <EditText
+        android:id="@+id/et_codigo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Codigo de confirmación"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/roboto"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#021D3D"
+        android:background="@drawable/rounded_edittext"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/btn_enviar_codigo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Validar"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto"
+        android:textColor="#021D3D"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+    <EditText
+        android:id="@+id/et_contrasena"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nueva Contraseña"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/roboto"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#021D3D"
+        android:background="@drawable/rounded_edittext"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/btn_restaurar_contrasena"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restablecer contraseña"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto"
+        android:textColor="#021D3D"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</LinearLayout>

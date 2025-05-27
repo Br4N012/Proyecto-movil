@@ -1,0 +1,111 @@
+package com.example.learncook
+
+import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.example.learncook.databinding.ActivityRegistroBinding
+import com.example.learncook.modelo.LearnCookDB
+import com.example.learncook.poko.Usuario
+
+class RegistroActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRegistroBinding
+    private lateinit var modelo: LearnCookDB
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityRegistroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        modelo = LearnCookDB(this)
+
+        binding.btnRegistrarse.setOnClickListener {
+            val correo = binding.etCorreo.text.toString()
+            val contrasena = binding.etContrasena.text.toString()
+            val nombreUsuario = binding.etNombreUsuario.text.toString()
+            if (validarDatos(correo, contrasena, nombreUsuario)) {
+                val usuario = Usuario(0, correo, contrasena, nombreUsuario)
+                val registrado = modelo.agregarUsuario(usuario)
+                if (registrado > 0) {
+                    Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
+                    finish()
+                } else {
+                    Toast.makeText(this, "No se pudo registrar el usuario", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        aplicarPreferenciasVisuales()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        aplicarPreferenciasVisuales()
+    }
+
+    private fun aplicarPreferenciasVisuales() {
+        val prefs = getSharedPreferences("config_visual", MODE_PRIVATE)
+        val tamTexto = prefs.getFloat("tam_texto", 20f)
+        val tamBoton = prefs.getFloat("tam_boton", 20f)
+        val modoOscuro = prefs.getBoolean("modo_oscuro", false)
+        val colorTexto = if (modoOscuro) android.graphics.Color.parseColor("#ADD8E6") else android.graphics.Color.BLACK
+        val colorFondo = if (modoOscuro) android.graphics.Color.BLACK else android.graphics.Color.parseColor("#FCFFDF")
+        val colorBoton = if (modoOscuro) android.graphics.Color.GRAY else android.graphics.Color.parseColor("#4CAF50")
+
+        binding.root.setBackgroundColor(colorFondo)
+        ajustarTamaños(binding.root, tamTexto, tamBoton, colorTexto, colorBoton)
+    }
+
+    private fun ajustarTamaños(view: View, tamañoTexto: Float, tamañoBoton: Float, colorTexto: Int, colorBoton: Int) {
+        when (view) {
+            is TextView -> {
+                view.textSize = tamañoTexto
+                view.setTextColor(colorTexto)
+            }
+            is Button -> {
+                view.textSize = tamañoBoton
+                view.setTextColor(colorTexto)
+                view.setBackgroundColor(colorBoton)
+                val params = view.layoutParams
+                params.height = (tamañoBoton * resources.displayMetrics.density).toInt()
+                view.layoutParams = params
+            }
+            is EditText -> {
+                view.textSize = tamañoTexto
+                view.setTextColor(colorTexto)
+            }
+            is ViewGroup -> {
+                for (i in 0 until view.childCount) {
+                    ajustarTamaños(view.getChildAt(i), tamañoTexto, tamañoBoton, colorTexto, colorBoton)
+                }
+            }
+        }
+    }
+
+    private fun validarDatos(correo: String, contrasena: String, nombreUsuario: String): Boolean {
+        return when {
+            correo.isEmpty() || contrasena.isEmpty() || nombreUsuario.isEmpty() -> {
+                Toast.makeText(this, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show()
+                false
+            }
+            !android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches() -> {
+                Toast.makeText(this, "Correo no válido", Toast.LENGTH_SHORT).show()
+                false
+            }
+            contrasena.length < 8 -> {
+                Toast.makeText(this, "La contraseña debe tener más de 8 caracteres", Toast.LENGTH_SHORT).show()
+                false
+            }
+            modelo.usuarioEnBase(correo) -> {
+                Toast.makeText(this, "Este correo ya está registrado", Toast.LENGTH_SHORT).show()
+                false
+            }
+            modelo.usuarioNombreRegistrado(nombreUsuario) -> {
+                Toast.makeText(this, "Este nombre de usuario ya está registrado", Toast.LENGTH_SHORT).show()
+                false
+            }
+            else -> true
+        }
+    }
+}
