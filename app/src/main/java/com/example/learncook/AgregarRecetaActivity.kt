@@ -21,6 +21,7 @@ import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Ingrediente
 import com.example.learncook.poko.Receta
 import com.example.learncook.utilidades.ToastHelper
+import com.example.learncook.utilidades.IngredientesActivity
 
 class AgregarRecetaActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAgregarRecetaBinding
@@ -28,6 +29,7 @@ class AgregarRecetaActivity : AppCompatActivity() {
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var unidadesAdapter: ArrayAdapter<String>
     private lateinit var listaDeIngredientes: MutableList<Ingrediente>
+
     private var idUsuario = 0
     private var presupuesto = 0.0
     private val listaId = mutableListOf<Int>()
@@ -36,14 +38,13 @@ class AgregarRecetaActivity : AppCompatActivity() {
     private val listaUnidaddes = listOf("kg", "g", "l", "ml", "tz", "cda", "pz")
     private var unidadSeleccionada = "g"
     private var imagenUri: Uri? = null
+    private lateinit var unidadesConOpcionInicial: List<String>
 
-    // Launcher para selección de imágenes con permisos persistentes
     private val seleccionarImagenLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { resultado: ActivityResult ->
         if (resultado.resultCode == Activity.RESULT_OK) {
             resultado.data?.data?.let { uri ->
-                // Toma permisos persistentes para la URI
                 contentResolver.takePersistableUriPermission(
                     uri,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -54,7 +55,6 @@ class AgregarRecetaActivity : AppCompatActivity() {
         }
     }
 
-    // Launcher para solicitud de permisos
     private val solicitarPermisoImagenes = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { concedido ->
@@ -74,26 +74,29 @@ class AgregarRecetaActivity : AppCompatActivity() {
         idUsuario = intent.getIntExtra("idUsuario", -1)
         listaDeIngredientes = modelo.traerIngredientes().toMutableList()
 
-        // Configuración de Spinners
         configurarSpinners()
-
-        // Configuración de listeners
         configurarListeners()
-
         aplicarPreferenciasVisuales()
     }
 
     private fun configurarSpinners() {
-        // Adaptador para Spinner de ingredientes
-        adapter = ArrayAdapter(
-            this,
-            R.layout.spiner_item,
-            listaDeIngredientes.map { it.nombre }
+        val nombresIngredientes = mutableListOf("Seleccionar ingrediente")
+        nombresIngredientes.addAll(
+            listaDeIngredientes.map {
+                val unidadMostrada = it.unidad?.takeIf { u -> u.isNotBlank() } ?: "sin unidad"
+                "${it.nombre} ($${it.precio}) - $unidadMostrada"
+            }
         )
+
+        adapter = ArrayAdapter(this, R.layout.spiner_item, nombresIngredientes)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spIngredientesReceta.adapter = adapter
 
-        // Spinner tiempo
+        unidadesConOpcionInicial = listOf("Seleccionar unidad de medida") + listaUnidaddes
+        unidadesAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, unidadesConOpcionInicial)
+        unidadesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spUnidadMedida.adapter = unidadesAdapter
+
         val tiempoAdapter = ArrayAdapter.createFromResource(
             this,
             R.array.unidades_tiempo,
@@ -101,46 +104,46 @@ class AgregarRecetaActivity : AppCompatActivity() {
         )
         tiempoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerUnidadTiempo.adapter = tiempoAdapter
-
-        // Spinner unidades
-        unidadesAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaUnidaddes)
-        unidadesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spUnidadMedida.adapter = unidadesAdapter
     }
 
     private fun configurarListeners() {
-        // Unidad seleccionada
         binding.spUnidadMedida.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                unidadSeleccionada = listaUnidaddes[position]
-            }
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                unidadSeleccionada = "g"
-            }
-        }
+                if (position == 0) return
+                unidadSeleccionada = unidadesConOpcionInicial[position]
 
-        // Selección de ingrediente
-        binding.spIngredientesReceta.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                if (position >= 1 && position < listaDeIngredientes.size) {
-                    val ingredienteSeleccionado = listaDeIngredientes[position]
+                val posIngrediente = binding.spIngredientesReceta.selectedItemPosition
+                if (posIngrediente >= 1 && posIngrediente < listaDeIngredientes.size + 1) {
+                    val ingredienteSeleccionado = listaDeIngredientes[posIngrediente - 1]
                     mostrarDialogCantidad(ingredienteSeleccionado)
                 }
             }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        binding.spIngredientesReceta.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                // No se hace nada al seleccionar ingrediente
+            }
+
             override fun onNothingSelected(parent: AdapterView<*>) {
                 binding.spIngredientesReceta.setSelection(0)
             }
         }
 
-        // Botón agregar receta
         binding.btnAgregarReceta.setOnClickListener {
-            ToastHelper.vibrate(this)
+            ToastHelper.vibrate(this@AgregarRecetaActivity)
             if (validarDatos()) {
                 guardarReceta()
             }
         }
+        binding.btnAgregarNuevoIngrediente.setOnClickListener {
+            val intent = Intent(this, AgregarIngredienteActivity::class.java)
+            intent.putExtra("idUsuario", idUsuario)  // Si lo necesitas
+            startActivity(intent)
+        }
 
-        // Seleccionar imagen
         binding.ivImagenReceta.setOnClickListener {
             verificarYPedirPermisos()
         }
@@ -148,10 +151,7 @@ class AgregarRecetaActivity : AppCompatActivity() {
 
     private fun verificarYPedirPermisos() {
         when {
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED -> {
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED -> {
                 abrirSelectorImagenes()
             }
             shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
@@ -216,6 +216,9 @@ class AgregarRecetaActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        listaDeIngredientes.clear()
+        listaDeIngredientes.addAll(modelo.obtenerIngredientes())
+        configurarSpinners()
         aplicarPreferenciasVisuales()
     }
 
@@ -260,8 +263,7 @@ class AgregarRecetaActivity : AppCompatActivity() {
         builder.setTitle("Cantidad de ${ingrediente.nombre}")
 
         val input = EditText(this).apply {
-            inputType = android.text.InputType.TYPE_CLASS_NUMBER or
-                    android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
+            inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
             hint = "Ej: 250"
         }
 
@@ -292,6 +294,7 @@ class AgregarRecetaActivity : AppCompatActivity() {
         )
         presupuesto += ingrediente.precio * cantidad
         binding.spIngredientesReceta.setSelection(0)
+        binding.spUnidadMedida.setSelection(0)
     }
 
     private fun validarDatos(): Boolean {

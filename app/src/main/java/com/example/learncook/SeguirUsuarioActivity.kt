@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.learncook.databinding.ActivitySeguirUsuarioBinding
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Usuario
+import com.example.learncook.utilidades.ToastHelper
 
 class SeguirUsuarioActivity : AppCompatActivity() {
 
@@ -33,10 +34,10 @@ class SeguirUsuarioActivity : AppCompatActivity() {
                         seguirUsuario(usuario)
                     }
                 } else {
-                    Toast.makeText(this, "Usuario no encontrado", Toast.LENGTH_SHORT).show()
+                    ToastHelper.showError(this, "Usuario no encontrado")
                 }
             } else {
-                Toast.makeText(this, "Por favor ingrese un nombre de usuario", Toast.LENGTH_SHORT).show()
+                ToastHelper.showWarning(this, "Por favor ingrese un nombre de usuario")
             }
         }
 
@@ -104,7 +105,7 @@ class SeguirUsuarioActivity : AppCompatActivity() {
             alertDialog.show()
         } else {
             // Manejar caso de error al seguir al usuario
-            Toast.makeText(this, "Error al seguir al usuario", Toast.LENGTH_SHORT).show()
+            ToastHelper.showError(this, "Error al seguir al usuario")
         }
     }
 }

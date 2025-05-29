@@ -14,6 +14,7 @@ import com.example.learncook.databinding.ActivityBuscarPresupuestoBinding
 import com.example.learncook.interfaces.ListenerRecycleReceta
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.RecetaDatos
+import com.example.learncook.utilidades.ToastHelper
 
 class BuscarPresupuestoActivity : AppCompatActivity(), ListenerRecycleReceta {
     private lateinit var binding: ActivityBuscarPresupuestoBinding
@@ -30,6 +31,7 @@ class BuscarPresupuestoActivity : AppCompatActivity(), ListenerRecycleReceta {
         idUsuario = intent.getIntExtra("idUsuario", -1)
 
         binding.Buscar.setOnClickListener {
+            ToastHelper.vibrate(this)
             val presupuestoMinimo = binding.edtPresupuestoMinimo.text.toString()
             val presupuestoMaximo = binding.edtPresupuestoMaximo.text.toString()
             if (validarDatos(presupuestoMinimo, presupuestoMaximo)) {
@@ -104,21 +106,21 @@ class BuscarPresupuestoActivity : AppCompatActivity(), ListenerRecycleReceta {
         try {
             minimo = presupuestoMinimo.toDouble()
         } catch (e: NumberFormatException) {
-            Toast.makeText(this, "El presupuesto mínimo no es un número válido", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "El presupuesto mínimo no es un número válido")
             return false
         }
         try {
             maximo = presupuestoMaximo.toDouble()
         } catch (e: NumberFormatException) {
-            Toast.makeText(this, "El presupuesto máximo no es un número válido", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "El presupuesto máximo no es un número válido")
             return false
         }
         if (minimo <= 0 || maximo <= 0) {
-            Toast.makeText(this, "No puedes poner números negativos o menores a 1", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "No puedes poner números negativos o menores a 1")
             return false
         }
         if (maximo < minimo) {
-            Toast.makeText(this, "El presupuesto máximo no debe ser menor al mínimo", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "El presupuesto máximo no debe ser menor al mínimo")
             return false
         }
         return true

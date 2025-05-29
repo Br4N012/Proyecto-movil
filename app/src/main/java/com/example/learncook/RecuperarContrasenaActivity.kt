@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.learncook.databinding.ActivityRecuperarContrasenaBinding
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.utilidades.Email
+import com.example.learncook.utilidades.ToastHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,12 +40,13 @@ class RecuperarContrasenaActivity : AppCompatActivity() {
                 if (modelo.isCorreo(correo)) {
                     enviarCorreo(correo)
                 } else {
-                    Toast.makeText(this, "Este correo no se encuentra registrado", Toast.LENGTH_LONG).show()
+                    ToastHelper.showError(this, "Este correo no se encuentra registrado")
                 }
             }
         }
 
         binding.btnEnviarCodigo.setOnClickListener {
+            ToastHelper.vibrate(this)
             if (validarDatosCodigo()) {
                 val codigoDeEntrada = binding.etCodigo.text.toString().toIntOrNull()
                 if (codigoDeEntrada != null && esIgualElCodigo(codigo, codigoDeEntrada)) {
@@ -52,24 +54,25 @@ class RecuperarContrasenaActivity : AppCompatActivity() {
                     binding.btnEnviarCodigo.visibility = View.GONE
                     binding.etContrasena.visibility = View.VISIBLE
                     binding.btnRestaurarContrasena.visibility = View.VISIBLE
-                    Toast.makeText(this, "Escribe una nueva contraseña", Toast.LENGTH_LONG).show()
+                    ToastHelper.showInfo(this, "Escribe una nueva contraseña")
                 } else {
-                    Toast.makeText(this, "Error: el código no es correcto", Toast.LENGTH_LONG).show()
+                    ToastHelper.showError(this, "Error: el código no es correcto")
                 }
             }
         }
 
         binding.btnRestaurarContrasena.setOnClickListener {
+            ToastHelper.vibrate(this)
             val contrasena = binding.etContrasena.text.toString()
             if (validarDatosContrasena(contrasena)) {
                 val actualizado = modelo.actualizarContrasena(correo, contrasena)
                 if (actualizado > 0) {
-                    Toast.makeText(this, "Contraseña actualizada", Toast.LENGTH_LONG).show()
+                    ToastHelper.showSuccess(this, "Contraseña actualizada")
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
                 } else {
-                    Toast.makeText(this, "No se pudo actualizar la contraseña", Toast.LENGTH_SHORT).show()
+                    ToastHelper.showError(this, "No se pudo actualizar la contraseña")
                 }
             }
         }
@@ -164,10 +167,10 @@ class RecuperarContrasenaActivity : AppCompatActivity() {
                 binding.btnEnviarCorreo.visibility = View.GONE
                 binding.etCodigo.visibility = View.VISIBLE
                 binding.btnEnviarCodigo.visibility = View.VISIBLE
-                Toast.makeText(this@RecuperarContrasenaActivity, "Se envió un código a tu correo electrónico", Toast.LENGTH_LONG).show()
+                ToastHelper.showInfo(this@RecuperarContrasenaActivity, "Se envió un código a tu correo electrónico")
             } else {
                 Log.e("Envio", "Error al enviar el correo electrónico")
-                Toast.makeText(this@RecuperarContrasenaActivity, "Error al enviar el correo", Toast.LENGTH_LONG).show()
+                ToastHelper.showError(this@RecuperarContrasenaActivity, "Error al enviar el correo")
             }
         }
     }

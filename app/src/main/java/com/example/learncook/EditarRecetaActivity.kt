@@ -34,11 +34,14 @@ class EditarRecetaActivity : AppCompatActivity(), ListenerRecycleIngrediente {
     private lateinit var ingredientes: List<Ingrediente>
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var unidadesAdapter: ArrayAdapter<String>
+    private lateinit var unidadesConOpcionInicial: List<String>
     private var idReceta = -1
     private var presupuesto = 0.0
     private val listaUnidades = listOf("kg", "g", "l", "ml", "tz", "cda", "pz")
     private var unidadSeleccionada = "g"
     private var imagenUri: Uri? = null
+    private var ingredienteSeleccionado: Ingrediente? = null
+
 
     // Launcher para selección de imágenes
     private val seleccionarImagenLauncher = registerForActivityResult(
@@ -77,19 +80,22 @@ class EditarRecetaActivity : AppCompatActivity(), ListenerRecycleIngrediente {
 
         aplicarPreferenciasVisuales()
 
-        listaDeIngredientes = modelo.traerIngredientes().toMutableList()
-
+        listaDeIngredientes =
+            (mutableListOf(Ingrediente(0, "Seleccionar un ingrediente", 0.0, 0.0, "")) +
+                    modelo.traerIngredientes()) as MutableList<Ingrediente>
         configurarSpinners()
         configuracionRecycle()
 
-        // Configurar listeners para la imagen
-        binding.ivImagenReceta.setOnClickListener {
-            verificarYPedirPermisos()
-        }
+
 
         binding.ivImagenReceta.setOnClickListener {
             verificarYPedirPermisos()
         }
+        binding.btnNuevoIngrediente.setOnClickListener {
+            val intent = Intent(this, AgregarIngredienteActivity::class.java)
+            startActivity(intent)
+        }
+
 
         val receta = modelo.obtenerReceta(idReceta)
         if (receta != null) {
@@ -125,59 +131,59 @@ class EditarRecetaActivity : AppCompatActivity(), ListenerRecycleIngrediente {
     }
 
     private fun configurarSpinners() {
-        // Spinner de ingredientes
-        adapter = ArrayAdapter(
-            this,
-            R.layout.spiner_item,
-            listaDeIngredientes.map { it.nombre }
-        ).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spIngredientesEditados.adapter = this
+        val nombresIngredientes = listaDeIngredientes.map {
+            if (it.id == 0) {
+                it.nombre
+            } else {
+                val unidadMostrada = if (it.unidad.isNullOrBlank()) "sin unidad" else it.unidad
+                "${it.nombre} ($${it.precio}) - $unidadMostrada"
+            }
         }
 
-        // Spinner de unidades de medida
-        unidadesAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            listaUnidades
-        ).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spUnidadMedida.adapter = this
-        }
+        adapter = ArrayAdapter(this, R.layout.spiner_item, nombresIngredientes.toMutableList())
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spIngredientesEditados.adapter = adapter
 
-        // Spinner de unidades de tiempo
-        ArrayAdapter.createFromResource(
+        // Adaptador para unidades de medida con opción inicial
+        unidadesConOpcionInicial = listOf("Seleccionar unidad de medida") + listaUnidades
+        unidadesAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, unidadesConOpcionInicial.toMutableList())
+        unidadesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spUnidadMedida.adapter = unidadesAdapter
+
+        // Adaptador para unidad de tiempo
+        val tiempoAdapter = ArrayAdapter.createFromResource(
             this,
             R.array.unidades_tiempo,
             android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spUnidadTiempo.adapter = adapter
-        }
-
-        // Listeners
-        binding.spUnidadMedida.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                unidadSeleccionada = listaUnidades[position]
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                unidadSeleccionada = "g"
-            }
-        }
+        )
+        tiempoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spUnidadTiempo.adapter = tiempoAdapter
 
         binding.spIngredientesEditados.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                if (position >= 1) {
-                    mostrarDialogCantidad(listaDeIngredientes[position])
-                }
+                ingredienteSeleccionado = if (position > 0) listaDeIngredientes[position] else null
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                binding.spIngredientesEditados.setSelection(0)
+                ingredienteSeleccionado = null
             }
         }
+
+        binding.spUnidadMedida.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                if (position > 0 && ingredienteSeleccionado != null) {
+                    unidadSeleccionada = listaUnidades[position - 1]
+                    mostrarDialogCantidad(ingredienteSeleccionado!!)
+                    ingredienteSeleccionado = null
+                    binding.spIngredientesEditados.setSelection(0, false)
+                    binding.spUnidadMedida.setSelection(0, false)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
     }
+
 
     private fun verificarYPedirPermisos() {
         when {
@@ -187,9 +193,11 @@ class EditarRecetaActivity : AppCompatActivity(), ListenerRecycleIngrediente {
             ) == PackageManager.PERMISSION_GRANTED -> {
                 abrirSelectorImagenes()
             }
+
             shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
                 mostrarExplicacionPermisos()
             }
+
             else -> {
                 solicitarPermisoImagenes.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
@@ -221,8 +229,47 @@ class EditarRecetaActivity : AppCompatActivity(), ListenerRecycleIngrediente {
 
     override fun onResume() {
         super.onResume()
+
+        // Recargar ingredientes desde la base de datos
+        val ingredientesDesdeBD = modelo.traerIngredientes().toMutableList()
+
+        // Agregar opción inicial si no está
+        if (ingredientesDesdeBD.none { it.id == 0 && it.nombre == "Seleccionar un ingrediente" }) {
+            ingredientesDesdeBD.add(
+                0,
+                Ingrediente(0, "Seleccionar un ingrediente", 0.0, 0.0, "")
+            )
+        }
+
+        listaDeIngredientes.clear()
+        listaDeIngredientes.addAll(ingredientesDesdeBD)
+
+        // Actualizar adapter del spinner de ingredientes
+        val nombresIngredientes = listaDeIngredientes.map {
+            if (it.id == 0) {
+                it.nombre
+            } else {
+                val unidadMostrada = if (it.unidad.isNullOrBlank()) "sin unidad" else it.unidad
+                "${it.nombre} ($${it.precio}) - $unidadMostrada"
+            }
+        }
+
+        adapter.clear()
+        adapter.addAll(nombresIngredientes)
+        adapter.notifyDataSetChanged()
+        binding.spIngredientesEditados.setSelection(0, false)
+
+        // Resetear unidad
+        binding.spUnidadMedida.setSelection(0, false)
+
         aplicarPreferenciasVisuales()
     }
+
+
+
+
+
+
 
     private fun aplicarPreferenciasVisuales() {
         val prefs = getSharedPreferences("config_visual", Context.MODE_PRIVATE)
@@ -353,10 +400,14 @@ class EditarRecetaActivity : AppCompatActivity(), ListenerRecycleIngrediente {
                         actualizarPresupuesto()
                         ToastHelper.showSuccess(this, "Ingrediente agregado")
                         actualizarPantalla()
+
+                        // Reseteamos ambos spinners sin disparar sus listeners
+                        binding.spIngredientesEditados.setSelection(0, false)
+                        binding.spUnidadMedida.setSelection(0, false)
+
                     } else {
-                        ToastHelper.showError(this, "Error al agregar ingrediente")
+                        ToastHelper.showError(this, "El ingrediente ya esta en la receta")
                     }
-                    binding.spIngredientesEditados.setSelection(0)
                 } else {
                     ToastHelper.showWarning(this, "La cantidad debe ser mayor a cero")
                 }

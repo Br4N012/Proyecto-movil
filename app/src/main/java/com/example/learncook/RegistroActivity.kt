@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.learncook.databinding.ActivityRegistroBinding
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Usuario
+import com.example.learncook.utilidades.ToastHelper
 
 class RegistroActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegistroBinding
@@ -28,10 +29,10 @@ class RegistroActivity : AppCompatActivity() {
                 val usuario = Usuario(0, correo, contrasena, nombreUsuario)
                 val registrado = modelo.agregarUsuario(usuario)
                 if (registrado > 0) {
-                    Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
+                    ToastHelper.showSuccess(this, "Usuario registrado correctamente")
                     finish()
                 } else {
-                    Toast.makeText(this, "No se pudo registrar el usuario", Toast.LENGTH_SHORT).show()
+                    ToastHelper.showError(this, "No se pudo registrar el usuario")
                 }
             }
         }
@@ -86,23 +87,23 @@ class RegistroActivity : AppCompatActivity() {
     private fun validarDatos(correo: String, contrasena: String, nombreUsuario: String): Boolean {
         return when {
             correo.isEmpty() || contrasena.isEmpty() || nombreUsuario.isEmpty() -> {
-                Toast.makeText(this, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show()
+                ToastHelper.showWarning(this, "Por favor llena todos los campos")
                 false
             }
             !android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches() -> {
-                Toast.makeText(this, "Correo no válido", Toast.LENGTH_SHORT).show()
+                ToastHelper.showError(this, "Correo no válido")
                 false
             }
             contrasena.length < 8 -> {
-                Toast.makeText(this, "La contraseña debe tener más de 8 caracteres", Toast.LENGTH_SHORT).show()
+                ToastHelper.showWarning(this, "La contraseña debe tener más de 8 caracteres")
                 false
             }
             modelo.usuarioEnBase(correo) -> {
-                Toast.makeText(this, "Este correo ya está registrado", Toast.LENGTH_SHORT).show()
+                ToastHelper.showError(this, "Este correo ya está registrado")
                 false
             }
             modelo.usuarioNombreRegistrado(nombreUsuario) -> {
-                Toast.makeText(this, "Este nombre de usuario ya está registrado", Toast.LENGTH_SHORT).show()
+                ToastHelper.showWarning(this, "Este nombre de usuario ya está registrado")
                 false
             }
             else -> true

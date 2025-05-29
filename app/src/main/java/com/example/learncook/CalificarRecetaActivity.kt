@@ -12,6 +12,7 @@ import com.example.learncook.adaptadores.CalificacionAdapter
 import com.example.learncook.databinding.ActivityCalificarRecetaBinding
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Calificacion
+import com.example.learncook.utilidades.ToastHelper
 
 class CalificarRecetaActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCalificarRecetaBinding
@@ -36,6 +37,7 @@ class CalificarRecetaActivity : AppCompatActivity() {
         configuracionRecycle()
 
         binding.btnCalificar.setOnClickListener {
+            ToastHelper.vibrate(this)
             if (validarDatos()) {
                 insertarCalificacion()
             }
@@ -90,22 +92,27 @@ class CalificarRecetaActivity : AppCompatActivity() {
 
     private fun configurarEstrellas() {
         binding.ibEstrella1.setOnClickListener {
+            ToastHelper.vibrate(this)
             pintarEstrellas(1)
             puntuacion = 1
         }
         binding.ibEstrella2.setOnClickListener {
+            ToastHelper.vibrate(this)
             pintarEstrellas(2)
             puntuacion = 2
         }
         binding.ibEstrella3.setOnClickListener {
+            ToastHelper.vibrate(this)
             pintarEstrellas(3)
             puntuacion = 3
         }
         binding.ibEstrella4.setOnClickListener {
+            ToastHelper.vibrate(this)
             pintarEstrellas(4)
             puntuacion = 4
         }
         binding.ibEstrella5.setOnClickListener {
+            ToastHelper.vibrate(this)
             pintarEstrellas(5)
             puntuacion = 5
         }
@@ -131,16 +138,16 @@ class CalificarRecetaActivity : AppCompatActivity() {
         val comentario = binding.tiComentario.text.toString()
         val calificacion = Calificacion(0, idUsuario, idReceta, puntuacion, comentario)
         if (modelo.agregarCalificacion(calificacion) > 0) {
-            Toast.makeText(this, "Calificación agregada correctamente", Toast.LENGTH_SHORT).show()
+            ToastHelper.showSuccess(this, "Calificación agregada correctamente")
             mostrarCalificaciones()
         } else {
-            Toast.makeText(this, "Ya calificaste esta receta", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "Ya calificaste esta receta")
         }
     }
 
     private fun validarDatos(): Boolean {
         return if (puntuacion < 0) {
-            Toast.makeText(this, "Por favor elige una puntuación", Toast.LENGTH_SHORT).show()
+            ToastHelper.showInfo(this, "Por favor elige una puntuación")
             false
         } else if (binding.tiComentario.text.toString().isEmpty()) {
             binding.tiComentario.error = "Llena este campo."

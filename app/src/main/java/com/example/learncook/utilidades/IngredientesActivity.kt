@@ -34,6 +34,7 @@ class IngredientesActivity : AppCompatActivity() {
 
         // Agregar ingrediente
         binding.btnAgregar.setOnClickListener {
+            ToastHelper.vibrate(this )
             val nombre = binding.etNombre.text.toString()
             val precio = binding.etPrecio.text.toString().toDoubleOrNull()
             val unidadSeleccionada = binding.spUnidadAgregar.selectedItem.toString()
@@ -48,19 +49,20 @@ class IngredientesActivity : AppCompatActivity() {
                 )
                 val resultado = db.agregarIngrediente(ingrediente)
                 if (resultado > 0) {
-                    showToast("Ingrediente agregado")
+                    ToastHelper.showSuccess(this,"Ingrediente agregado")
                     limpiarCamposAgregar()
                     mostrarIngredientes()
                 } else {
-                    showToast("Error al agregar")
+                    ToastHelper.showError(this,"Error al agregar")
                 }
             } else {
-                showToast("Completa nombre y precio correctamente")
+                ToastHelper.showWarning(this,"Completa nombre y precio correctamente")
             }
         }
 
         // Eliminar ingrediente
         binding.btnEliminar.setOnClickListener {
+            ToastHelper.vibrate(this )
             val id = binding.etIdEliminar.text.toString().toIntOrNull()
             if (id != null) {
                 val exito = db.borrarIngrediente(id)
@@ -75,6 +77,7 @@ class IngredientesActivity : AppCompatActivity() {
         // Actualizar ingrediente (incluyendo unidad)
         // Actualizar ingrediente
         binding.btnActualizar.setOnClickListener {
+            ToastHelper.vibrate(this )
             val id = binding.etIdActualizar.text.toString().toIntOrNull()
             val nuevoNombre = binding.etNuevoNombre.text.toString()
             val nuevoPrecio = binding.etNuevoPrecio.text.toString().toDoubleOrNull()

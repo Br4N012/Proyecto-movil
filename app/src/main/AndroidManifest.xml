@@ -35,6 +35,9 @@
             android:name=".CalificarRecetaActivity"
             android:exported="false" />
         <activity
+            android:name=".AgregarIngredienteActivity"
+            android:exported="false" />
+        <activity
             android:name=".RecuperarContrasenaActivity"
             android:exported="true" />
         <activity

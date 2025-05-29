@@ -15,6 +15,7 @@ import com.example.learncook.interfaces.ListenerRecycleReceta
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Ingrediente
 import com.example.learncook.poko.RecetaDatos
+import com.example.learncook.utilidades.ToastHelper
 
 class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
     private lateinit var binding: ActivityBuscarIngredienteBinding
@@ -60,6 +61,7 @@ class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
             }
 
         binding.btnAgregar.setOnClickListener {
+            ToastHelper.vibrate(this)
             agregarIngrediente(ingredienteSeleccionado)
         }
         // Debajo de agregarIngrediente() y antes de obtenerIngredientesSeleccionados()
@@ -69,12 +71,13 @@ class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
         }
 
         binding.btnBuscar.setOnClickListener {
+            ToastHelper.vibrate(this)
             configuracionRecycle()
             val ingredientesSeleccionados = obtenerIngredientesSeleccionados()
             if (ingredientesSeleccionados.isNotEmpty()) {
                 buscarRecetasPorIngredientes()
             } else {
-                Toast.makeText(this, "Agregue al menos un ingrediente", Toast.LENGTH_SHORT).show()
+                ToastHelper.showWarning(this, "Selecciona al menos un ingrediente")
             }
         }
 
@@ -134,7 +137,7 @@ class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
         binding.tblIngredientes.addView(nuevaFila)
         idIngrediente.add(ingrediente.id)
 
-        Toast.makeText(this, "Ingrediente agregado: ${ingrediente.nombre}", Toast.LENGTH_SHORT).show()
+        ToastHelper.showSuccess(this, "Ingrediente agregado: ${ingrediente.nombre}")
     }
 
     private fun obtenerIngredientesSeleccionados(): List<String> {
@@ -168,7 +171,7 @@ class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
                 recetaAdapter = RecetaAdapter(recetas, this, unidadSeleccionada)
                 binding.recycleRecetas.adapter = recetaAdapter
             } else {
-                Toast.makeText(this, "No se encontraron recetas", Toast.LENGTH_SHORT).show()
+                ToastHelper.showWarning(this, "No se encontraron recetas con los ingredientes seleccionados")
             }
         }
     }

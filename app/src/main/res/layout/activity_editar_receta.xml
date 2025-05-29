@@ -75,6 +75,21 @@
                 android:padding="10dp" />
         </LinearLayout>
 
+        <!---Boton para agregar ingrediente-->
+        <Button
+            android:id="@+id/btn_nuevo_ingrediente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rounded_button"
+            android:fontFamily="@font/roboto"
+            android:text="Nuevo ingrediente"
+            android:textColor="#021D3D"
+            android:textSize="16sp" />
+
+
         <!-- Selector de ingredientes y unidades -->
         <LinearLayout
             android:layout_width="match_parent"

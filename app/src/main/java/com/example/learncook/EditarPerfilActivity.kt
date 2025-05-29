@@ -14,6 +14,7 @@ import com.example.learncook.databinding.ActivityEditarPerfilBinding
 import com.example.learncook.fragmentos.PerfilFragment
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Usuario
+import com.example.learncook.utilidades.ToastHelper
 
 class EditarPerfilActivity : AppCompatActivity() {
 
@@ -31,7 +32,7 @@ class EditarPerfilActivity : AppCompatActivity() {
         val idUsuario = intent.getIntExtra("idUsuario", -1)
         Log.d("EditarPerfilActivity", "idUsuario recibido: $idUsuario")
         usuario = db.traerUsuario2(idUsuario) ?: run {
-            Toast.makeText(this, "Usuario no encontrado", Toast.LENGTH_SHORT).show()
+            ToastHelper.showError(this, "Usuario no encontrado")
             finish()
             return
         }
@@ -46,21 +47,21 @@ class EditarPerfilActivity : AppCompatActivity() {
             val contrasenaNueva = binding.etNuevaContraseA.text.toString()
 
             if (nombreNuevo.isEmpty() || correoNuevo.isEmpty() || contrasenaNueva.isEmpty()) {
-                Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
+                ToastHelper.showWarning(this, "Por favor, complete todos los campos")
                 return@setOnClickListener
             }
 
             if (!Patterns.EMAIL_ADDRESS.matcher(correoNuevo).matches()) {
-                Toast.makeText(this, "Por favor, ingrese un correo electrónico válido", Toast.LENGTH_SHORT).show()
+                ToastHelper.showWarning(this, "Por favor, ingrese un correo electrónico válido")
                 return@setOnClickListener
             }
 
             if (db.isCorreo(correoNuevo) && correoNuevo != usuario.correo) {
-                Toast.makeText(this, "El correo electrónico ya está en uso", Toast.LENGTH_SHORT).show()
+                ToastHelper.showInfo(this, "El correo electrónico ya está en uso")
                 return@setOnClickListener
             }
             if (db.usuarioNombreRegistrado(nombreNuevo) && nombreNuevo != usuario.nombreUsuario) {
-                Toast.makeText(this, "El nombre de usuario ya está en uso", Toast.LENGTH_SHORT).show()
+                ToastHelper.showInfo(this, "El nombre de usuario ya está en uso")
                 return@setOnClickListener
             }
 
@@ -68,7 +69,7 @@ class EditarPerfilActivity : AppCompatActivity() {
             db.actualizarContrasena(usuario.correo, contrasenaNueva)
             db.actualizarCorreo(usuario.correo, correoNuevo)
 
-            Toast.makeText(this, "Cambios guardados", Toast.LENGTH_SHORT).show()
+            ToastHelper.showSuccess(this, "Cambios guardados")
 
             val intent = Intent(this, PerfilFragment::class.java)
             intent.putExtra("idUsuario", idUsuario)

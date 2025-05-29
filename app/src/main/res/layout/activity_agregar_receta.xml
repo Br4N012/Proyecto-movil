@@ -41,6 +41,7 @@
             android:textColor="#000000"
             android:textColorHint="#000000"
             android:background="@drawable/rounded_edittext" />
+
         <!-- NUEVO: Campo numérico + unidad de tiempo -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,6 +72,17 @@
                 android:padding="10dp"
                 android:background="@drawable/rounded_edittext" />
         </LinearLayout>
+        <Button
+            android:id="@+id/btn_agregar_nuevo_ingrediente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar nuevo ingrediente"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#00796B"
+            android:fontFamily="@font/roboto"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,6 +115,9 @@
                 android:textColorHint="#000000" />
         </LinearLayout>
 
+        <!-- NUEVO BOTÓN PARA AGREGAR INGREDIENTE -->
+
+
         <EditText
             android:id="@+id/et_ingredientes"
             android:layout_width="match_parent"
@@ -118,7 +133,6 @@
             android:textColorHint="@color/black"
             android:enabled="false" />
 
-        <!-- Campo para mostrar imagen de la receta -->
         <ImageView
             android:id="@+id/iv_imagen_receta"
             android:layout_width="200dp"
@@ -164,6 +178,5 @@
             android:layout_marginTop="15dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp" />
-
     </LinearLayout>
 </ScrollView>
